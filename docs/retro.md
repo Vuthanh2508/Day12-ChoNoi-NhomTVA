@@ -25,16 +25,17 @@
     - Trong quá trình phát triển, bạn Hoàng gặp một số trục trặc mạng cục bộ nên ban đầu thực hiện ghép cặp (pair programming) cùng Integrator; đến cuối Phase 4 bạn đã kịp thời hoàn thiện và push đầy đủ 3 commit độc lập theo đúng quy định.
 - Số liệu: số commit theo người, cách đọc code của nhau, token theo người:
   - **Số commit theo người (đếm theo GitHub author trên lịch sử non-merge của `main` hiện tại):**
-    - **Vũ Thành** (`Vuthanh2508`): **29 commits** (Khởi tạo repo, Contract v1.0–v1.3, tích hợp DaySim, 2 AI skills, bench, soak, live day, sprint Shift, đóng ca 10s và hồ sơ release).
+    - **Vũ Thành** (`Vuthanh2508`): **30 commits** (Khởi tạo repo, Contract v1.0–v1.3, tích hợp DaySim, 2 AI skills, bench, soak, live day, sprint Shift, đóng ca 10s và hồ sơ release).
     - **Đỗ Việt Anh** (`vietahnn`): **9 commits** (gồm 5 commits author `vietahnn` + 4 commits author `vietanh` trước khi đồng bộ handle; lát Quán 2 bếp 4 bàn, thực đơn 6 món, hao tươi kho, phục vụ, giá & tip).
     - **Nguyễn Công Hoàn** (`hoan11052004`): **6 commits** (QA test suites, kiểm thử chấp nhận P1–P4, UI accessibility). *(Tính cả commit trên branch tính năng trước khi merge PR là 10 commits)*.
     - **Trần Đức Trung** (`kientrungtd135`): **6 commits** (Lát Gather: cơ chế bơi, đàn cá, cá sấu, dòng lũ, giỏ cá thể). *(Tính cả commit trên branch tính năng là 7 commits)*.
     - **Nguyễn Phi Hoàng** (`phihoang1709`): **3 commits** độc lập (`cad0b9a` cập nhật UI P1, `f9e7bd0` cập nhật UI P2, `ca2ba42` cập nhật docs P4) + các commit pair programming (Giao diện Web Canvas, HUD, theme Tây Nam Bộ).
-    > **Ghi chú minh bạch:** Cả 5 thành viên đều đạt tiêu chí **$\ge 3$ commit có nội dung** theo quy định của lab. Sự khác biệt giữa số đếm trên branch tính năng ban đầu (27 / 10 / 7 / 10 / 3) và lịch sử commit trên `main` (29 / 9 / 6 / 6 / 3) là do quá trình rebase khi merge PR và việc thành viên Đỗ Việt Anh đổi `git config user.name` từ `vietanh` sang `vietahnn`.
+    > **Ghi chú minh bạch:** Cả 5 thành viên đều đạt tiêu chí **$\ge 3$ commit có nội dung** theo quy định của lab. Sự khác biệt giữa số đếm trên branch tính năng ban đầu (27 / 10 / 7 / 10 / 3) và lịch sử commit trên `main` (30 / 9 / 6 / 6 / 3) là do quá trình rebase khi merge PR và việc thành viên Đỗ Việt Anh đổi `git config user.name` từ `vietanh` sang `vietahnn`.
   - **Cách đọc code của nhau:**
     - Review chéo PR theo cặp module liền kề: `sim/gather` đọc `sim/quan`, QA đọc cả hai module; Integrator rà soát tổng thể hợp đồng và chạy regression test trước khi merge vào nhánh `main`.
-  - **Ước tính token AI sử dụng:**
-    - Trung bình mỗi thành viên tiêu thụ khoảng 200k – 350k tokens thông qua các công cụ hỗ trợ như Antigravity / Gemini CLI / Claude trong toàn bộ quá trình phát triển 4 phase.
+  - **Ước tính token AI sử dụng (khớp theo `docs/ai-usage-log.md`):**
+    - Tổng cộng toàn nhóm tiêu thụ khoảng **433,000 tokens** qua 4 phase (Vũ Thành: ~92k, Nguyễn Phi Hoàng: ~99k, Nguyễn Công Hoàn: ~95k, Trần Đức Trung: ~79k, Đỗ Việt Anh: ~68k).
+    - Trung bình mỗi thành viên tiêu thụ khoảng **70k – 100k tokens** thông qua các công cụ hỗ trợ như Antigravity / Gemini CLI / ChatGPT / Claude Code / ZCode trong toàn bộ quá trình phát triển 4 phase.
 - Một lần AI sai và cách nhóm phát hiện:
   - Trong Phase 3 khi lập trình cơ chế hao độ tươi ở `gather.py`, AI đã đề xuất trừ độ tươi của giỏ đồ trong mọi tick mà không kiểm tra trạng thái tạm dừng, khiến cho khi bấm `pause`, thực phẩm vẫn tiếp tục bị giảm độ tươi.
   - **Cách nhóm phát hiện:** QA chạy bộ kiểm thử `test_gather_phase3_final.py` (`test_pause_stops_freshness_and_simulation`), test bị FAIL do khi pause thì độ tươi của vật phẩm vẫn giảm. Nhóm đã tra soát mã nguồn, phát hiện AI bỏ sót điều kiện `if self.paused: return` trước đoạn xử lý hao tươi, nhóm đã sửa lại điều kiện này và test lập tức vượt qua.
