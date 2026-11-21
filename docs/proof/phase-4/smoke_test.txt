@@ -1,6 +1,8 @@
 === BẰNG CHỨNG KIỂM THỬ PHASE 4 ===
 
 --- 1. KẾT QUẢ UNIT & SMOKE TESTS (Mã thoát: 0) ---
+test_multi_day_revenue_and_spending_lifecycle (test_day_revenue_integration.DayRevenueIntegrationTests.test_multi_day_revenue_and_spending_lifecycle)
+Kiểm chứng: Khách trả tiền -> DaySim nhận realtime -> Mua shop bị trừ tiền nhưng không giảm earned -> Sang Ngày 2 bảo toàn số dư và tính đúng shift_earned. ... ok
 test_gather_uses_tuning_freshness_config (test_freshness_config.FreshnessConfigTests.test_gather_uses_tuning_freshness_config)
 GatherSim áp dụng đúng initial, gather_decay_per_s, spoiled_below từ tuning. ... ok
 test_quan_uses_tuning_freshness_config (test_freshness_config.FreshnessConfigTests.test_quan_uses_tuning_freshness_config)
@@ -174,7 +176,7 @@ test_too_few_members (test_team_check.TeamCheck.test_too_few_members) ... ok
 test_wrong_size_duplicate_and_outsider (test_team_check.TeamCheck.test_wrong_size_duplicate_and_outsider) ... ok
 
 ----------------------------------------------------------------------
-Ran 146 tests in 24.890s
+Ran 147 tests in 24.873s
 
 OK
 
