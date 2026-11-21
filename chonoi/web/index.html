@@ -32,7 +32,7 @@ const cv = document.getElementById("c");
 const ctx = cv.getContext("2d");
 let snap = null, offline = false, plan = null; // plan = kế hoạch Má Tư (event day_plan, P2)
 // P2 vòng ngày: menu/pause/shop + cache sự kiện (render phòng thủ, sim v1.1 chưa có thì ẩn)
-let menuOpen = true, pauseActive = false, legacyServer = false, exitNote = false;
+let menuOpen = true, pauseActive = false, legacyServer = false, exitNote = false, showLog = false;
 let pendingPause = false, pendingBuy = null, pendingShopDone = false;
 let intro = null, introStart = 0, lastInventory = null, quanEnd = null, dayStats = null, seenEvt = {};
 // Sáng tạo: thoại giọng Nam Bộ theo event + SFX WebAudio (chỉ tầng hiển thị, headless không đụng)
@@ -124,6 +124,7 @@ addEventListener("keydown", (e) => {
   else if (k === "r") { fetch("/restart", { method: "POST" }); lastSent = ""; down.clear(); }
   else if (k === "h") toggleContrast();
   else if (k === "m") toggleMute();
+  else if (k === "l") showLog = !showLog;
   else if (k === "escape" || k === "p") { pauseActive = !pauseActive; pendingPause = true; }
   else if (menuOpen && !exitNote && k === "enter") { menuOpen = false; fetch("/restart", { method: "POST" }); lastSent = ""; }
   else if (menuOpen && k === "q") exitNote = true;
@@ -415,6 +416,7 @@ function brief(d) {
   try { const s = JSON.stringify(d); return s.length > 60 ? s.slice(0, 57) + "…" : s; } catch (e) { return ""; }
 }
 function eventLog(w, h) {
+  if (!showLog) return;
   const ev = (snap.events || []).slice(-6);
   ev.forEach((e, i) => text(`t${e.tick} ${e.name} ${brief(e.data)}`, w - 10, h - 92 - (ev.length - 1 - i) * 22, { size: 11, align: "right", color: "rgba(232,238,242,.75)" }));
 }
@@ -689,7 +691,7 @@ function drawGather(w, h) {
     const names = counts(snap.hold);
     text("Giỏ " + snap.hold.length + "/" + cap + "  " + Object.keys(names).map((k) => (KIND_NAME[k] || k) + "×" + names[k]).join(", "), 14, y0 + sz + 16, { size: 12, color: "#cfd8dc" });
   }
-  text("WASD/mũi tên bơi · E hái / cập bến · Space bắt cá · R chơi lại", w - 10, h - 14, { size: 12, align: "right", color: "#9fb3c0" });
+  text("WASD/mũi tên bơi · E hái/cập bến · Space bắt cá · L log · R chơi lại", w - 10, h - 14, { size: 12, align: "right", color: "#9fb3c0" });
 }
 
 // ----- quán: helper trạng thái bếp / bàn / khách (chỉ hiển thị, đọc snapshot phòng thủ) -----
@@ -951,7 +953,7 @@ function drawQuan(w, h) {
     kx += 76;
   });
 
-  text("WASD/mũi tên đi · E tương tác (bếp / bàn) · R chơi lại", w - 12, h - 14, { size: 15, align: "right", color: "#9fb3c0" });
+  text("WASD/mũi tên đi · E tương tác · L bật/tắt log · R chơi lại", w - 12, h - 14, { size: 15, align: "right", color: "#9fb3c0" });
 }
 
 // ----- P2: màn hình vòng ngày (menu / intro / kết quả / shop / pause) -----
