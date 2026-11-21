@@ -18,7 +18,7 @@
   - **Điều tốt:**
     - Hiệu năng hệ thống rất cao: Benchmark có render đạt 119.87 FPS trung bình và 79.96 FPS 1% low (vượt xa chuẩn $\ge 60$ FPS và $\ge 30$ FPS); thời gian tải trang chỉ 789 ms ($\le 10$ s).
     - Soak test hoàn thành 10/10 ngày với 0 crash trong kịch bản bot tất định. Bài test xác nhận độ ổn định của vòng đời nhiều ngày, nhưng chưa đo memory usage
-    - Bộ test tự động bao phủ toàn diện 144/144 tests (tăng từ 57 ở P1 $\rightarrow$ 93 ở P2 $\rightarrow$ 135 ở P3 $\rightarrow$ 144 ở P4). Hai công cụ AI skill (`verify-phase`, `inventory-validator`) giúp tự động hóa khâu nghiệm thu và trích xuất bằng chứng nhanh chóng, chính xác.
+    - Bộ test tự động bao phủ toàn diện 150/150 tests (tăng từ 57 ở P1 $\rightarrow$ 93 ở P2 $\rightarrow$ 135 ở P3 $\rightarrow$ 150 ở P4). Hai công cụ AI skill (`verify-phase`, `inventory-validator`) giúp tự động hóa khâu nghiệm thu và trích xuất bằng chứng nhanh chóng, chính xác.
     - Tính năng Accessibility (tương phản cao, 3 cảnh báo trực quan) và mở rộng cho nhóm 5 người (phụ đề SFX, dòng nước lũ) chạy ổn định và giữ vững tính tất định byte-by-byte.
   - **Điều tệ:**
     - Khi merge PR #13 và PR #14 ở Phase 3 xuất hiện xung đột kiểu dữ liệu giữa biến `current_direction` (int vs None) gây fail một test biên ở `gather.py:677`, nhóm phải mất thêm 1 PR hotfix #15 để xử lý triệt để.

@@ -8,8 +8,16 @@ All notable changes to this project will be documented in this file.
 - **Benchmark có render** (`chonoi/bench.py`): Chrome/Edge headless 1280×720, làm nóng 3 s rồi đo, xuất `avg_fps, p1_low_fps, frames, measured_s, load_ms`.
 - **Soak headless** (`chonoi/soak.py`): N Ngày trong một tiến trình bằng bot tất định; kế hoạch D1–D5 lặp ở Ngày 6–10; xuất `days, days_completed, crashes, results, duration_s`.
 - **Live `--mode day`:** chơi trọn vòng ngày trên trình duyệt (sáng → quán → shop), nhận `pause`/`buy`/`shop_done`.
-- UI: cảnh báo oxy/thủy quái/khách sắp giận, chế độ tương phản cao, phụ đề SFX.
+- **Cơ chế Tăng tốc Shift (Sprint 1.6x):** Giữ phím `Shift` tăng 1.6 lần tốc độ bơi của Út Sen dưới sông (`gather`) và tốc độ đi lại trong quán ăn (`quan`), có hiển thị `⚡ TĂNG TỐC` trực quan.
+- **Tự động đóng ca sau 10 giây khi hết khách:** Trong chế độ ngày, khi đã phục vụ xong toàn bộ khách theo kế hoạch ngày và quán không còn khách, đồng hồ tự đếm ngược 10s trước khi đóng ca, kèm banner đếm ngược.
+- **Màn hình Tổng kết Ngày (Day Summary Screen):** Giao diện glassmorphism tổng kết chi tiết món phục vụ, khách bỏ về, doanh thu ca tối, tích lũy quỹ và uy tín quán, chuyển mượt mà sang Chợ Má Tư (Shop).
+- **Phím L bật/tắt Debug Event Log:** Mặc định ẩn log sự kiện để giao diện đẹp, thoáng đãng; phím `L` cho phép bật/tắt nhanh khi cần kiểm tra kỹ thuật.
+- UI & Trợ năng: cảnh báo oxy/thủy quái/khách sắp giận, chế độ tương phản cao, phụ đề SFX khi tắt tiếng.
+- **Hệ thống Kiểm thử Mở rộng:** Bộ test suites đạt **150/150 tests** pass 100%, bảo toàn tính tất định byte-by-byte SHA-256.
+
 ### Fixed
+- **Tham số Độ tươi động:** Đọc `initial`, `gather_decay_per_s`, `quan_decay_per_s`, `spoiled_below` từ `game.contract.json` thay vì hardcode.
+- **Bảo toàn doanh thu DaySim:** Đồng bộ doanh thu `earned` và `shift_earned` realtime từ QuanSim sang DaySim, không bị mất hoặc ghi đè sau khi mua sắm ở Shop.
 - Dọn code trùng sau merge #13/#14 trong `sim/gather.py` (crash dòng lũ, vật phẩm nhân đôi, hao tươi gấp đôi).
 - Snapshot pha shop không còn văng lỗi với kho cá thể; nâng cấp ở shop không còn ghi đè tuning dùng chung; thủy quái theo `from_day` hoạt động trong mode day.
 

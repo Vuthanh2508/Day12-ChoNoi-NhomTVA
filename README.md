@@ -27,7 +27,7 @@ python3 -m chonoi.live --mode day      # mở http://127.0.0.1:8000 — chơi tr
 Các lệnh khác:
 
 ```bash
-PYTHONPATH=tests:. python3 -m unittest discover -s tests -v                  # toàn bộ test (144)
+PYTHONPATH=tests:. python3 -m unittest discover -s tests -v                  # toàn bộ test (150)
 python3 -m chonoi.headless --mode day --seed 42 --ticks 600 --out out.jsonl --days 1   # headless theo Test Contract
 python3 -m chonoi.bench --seed 42 --duration 30 --out bench.json             # benchmark có render (Chrome/Edge headless 1280×720)
 python3 -m chonoi.soak --seed 7 --days 10 --out soak.json                    # soak 10 ngày một tiến trình
@@ -38,8 +38,10 @@ Cảnh báo dễ nhận biết (chữ/biểu tượng): **oxy sắp hết**, **t
 
 ### Điều khiển & Phím bấm
 - **WASD / Phím mũi tên:** Di chuyển thuyền lặn (Gather: `[x, d]`) hoặc người phục vụ (Quán: `[x, z]`).
+- **Giữ Shift (Sprint):** Tăng tốc độ bơi / đi lại lên **1.6 lần** (hiển thị `⚡ TĂNG TỐC` trên màn hình).
 - **E / Phím bấm Tương tác (`interact`):** Cập bến (Gather), Bật bếp nấu / Bưng món / Phục vụ bàn (Quán).
 - **Space (`catch`):** Bắt cá dưới nước khi nằm trong bán kính tương tác (Gather).
+- **L:** Bật / tắt thanh nhật ký sự kiện debug (Event log) ở góc phải màn hình (mặc định ẩn để UI gọn gàng).
 - **R:** Reset / Bắt đầu lại ca.
 - **Esc / P:** Tạm dừng. **Shop:** phím 1 (bình oxy), 2 (áo phao), Enter đóng shop. **H:** tương phản cao. **M:** tắt tiếng.
 
@@ -50,6 +52,9 @@ Cảnh báo dễ nhận biết (chữ/biểu tượng): **oxy sắp hết**, **t
 
 ## Sáng tạo của nhóm
 - **Mở rộng đã làm (nhóm 5 người, ≥ 1 mục):** (1) **Phụ đề SFX** khi tắt tiếng — bằng chứng ở [docs/verification/phase-4.md](docs/verification/phase-4.md); (2) **Dòng nước lũ** (`current`, khai trong `extensions`). Chưa làm bảng xếp hạng cục bộ.
+- **Tăng tốc Shift (Sprint 1.6x) & Tiện ích:** Giữ Shift để bơi nhanh và chạy việc trong quán; phím `L` bật/tắt event log giúp giao diện thông thoáng.
+- **Tự động đóng ca sau 10s khi hết khách:** Hoàn thành toàn bộ khách trong kế hoạch ngày (`day_plan`), quán tự động đếm ngược 10 giây đóng cửa kèm banner nổi bật, không bắt người chơi chờ đợi vô ích.
+- **Màn hình Tổng kết Ngày:** Thống kê chi tiết doanh thu, món phục vụ, uy tín và quỹ tích lũy trước khi ghé Chợ Má Tư (Shop).
 - **Đề tài miền Tây trong client (`chonoi/web/index.html`, theo PRD mục 3):** ánh hồng buổi sớm + quầng mặt trời, nước phù sa 2 lớp, sóng lăn tăn + tia sáng dưới nước, bờ dừa nước + nhà sàn cạnh bến; buổi tối có đèn dây vàng nhấp nháy, khói bếp khi nấu, sàn ván + phao nổi của nhà bè trên nước đêm. Út Sen mặc áo bà ba, quấn khăn rằn, đeo kính lặn khi lặn và giỏ lưới đeo hông.
 - **Vector hình theo loại nguyên liệu:** cá lóc (sọc, mõm nhọn), cá linh (bạc, đuôi chẻ), cá kèo (dẹt, sọc dọc), bông điên điển (chùm cầu vàng), bông súng (cánh hồng xòe), kèo nèo (chùm hoa); Cá Sấu vẽ riêng kèm cảnh báo "Thủy quái!" viền tím khi tới gần.
 - **HUD & màn hình chuẩn Phase 2:** chữ không chân ≥18px @1280×720, giờ đổi màu khi còn ≤30s, checklist "Má Tư cần" (đã lấy/cần từ event `day_plan`), gợi ý hái/cập bến khi tới gần, "Hết hơi!" khi oxy cạn; Menu chính, DayIntro, EveningIntro, DayResult, Shop (mua nâng cấp phím 1/2), Pause (Esc/P) và Summary — tất cả render phòng thủ, sim bật pha nào client hiện pha đó.

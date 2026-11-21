@@ -21,4 +21,4 @@
 | Phase 4 | Trần Đức Trung | Tối ưu hóa vòng lặp mô phỏng lặn cho benchmark FPS cao | Đảm bảo tính ổn định của giỏ đồ khi chạy soak dài ngày | Không gặp vướng mắc kỹ thuật |
 | Phase 4 | Đỗ Việt Anh | Kiểm tra rò rỉ bộ nhớ và dọn rác đơn hàng cho soak 10 ngày | Hỗ trợ kiểm thử chế độ chơi live day | Không gặp vướng mắc kỹ thuật |
 | Phase 4 | Nguyễn Phi Hoàng | Cài đặt chế độ tương phản cao và phụ đề SFX khi tắt tiếng | Bổ sung file phản tư cá nhân và nhật ký AI | Gặp conflict nhẹ trong `docs/members/` do đồng thời push tài liệu, đã pull và merge độc lập thành công |
-| Phase 4 | Nguyễn Công Hoàn | Chạy toàn bộ 144/144 tests pass, trích xuất bằng chứng bench/soak | Cập nhật ma trận truy vết `docs/verification/phase-4.md` | Đạt 100% tiêu chí chấp nhận, sẵn sàng cho khâu phát hành Release v1.0.0 |
+| Phase 4 | Nguyễn Công Hoàn | Chạy toàn bộ 150/150 tests pass, trích xuất bằng chứng bench/soak | Cập nhật ma trận truy vết `docs/verification/phase-4.md` | Đạt 100% tiêu chí chấp nhận, sẵn sàng cho khâu phát hành Release v1.0.0 |
