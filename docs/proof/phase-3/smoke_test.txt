@@ -35,6 +35,21 @@ test_hit_lifo_and_invulnerability (test_gather_phase2_monsters.Phase2MonsterTest
 test_no_chase_if_shallow (test_gather_phase2_monsters.Phase2MonsterTests.test_no_chase_if_shallow) ... ok
 test_patrol_speed (test_gather_phase2_monsters.Phase2MonsterTests.test_patrol_speed) ... ok
 test_recoil (test_gather_phase2_monsters.Phase2MonsterTests.test_recoil) ... ok
+test_current_pushes_at_depth_10 (test_gather_phase3_current.GatherPhase3CurrentTests.test_current_pushes_at_depth_10) ... ok
+test_end_exact_tick_2280 (test_gather_phase3_current.GatherPhase3CurrentTests.test_end_exact_tick_2280) ... ok
+test_no_push_above_depth_10 (test_gather_phase3_current.GatherPhase3CurrentTests.test_no_push_above_depth_10) ... ok
+test_same_seed_same_direction_and_position (test_gather_phase3_current.GatherPhase3CurrentTests.test_same_seed_same_direction_and_position) ... ok
+test_start_exact_tick_1800 (test_gather_phase3_current.GatherPhase3CurrentTests.test_start_exact_tick_1800) ... ok
+test_warning_exact_tick_1680 (test_gather_phase3_current.GatherPhase3CurrentTests.test_warning_exact_tick_1680) ... ok
+test_faint_lifo_and_atomic_empty_inventory (test_gather_phase3_final.GatherPhase3FinalTests.test_faint_lifo_and_atomic_empty_inventory) ... ok
+test_pause_stops_freshness_and_simulation (test_gather_phase3_final.GatherPhase3FinalTests.test_pause_stops_freshness_and_simulation) ... ok
+test_resume_continues_simulation (test_gather_phase3_final.GatherPhase3FinalTests.test_resume_continues_simulation) ... ok
+test_existing_ids_reserved (test_gather_phase3_hold.GatherPhase3HoldTests.test_existing_ids_reserved) ... ok
+test_freshness_decreases (test_gather_phase3_hold.GatherPhase3HoldTests.test_freshness_decreases) ... ok
+test_freshness_never_negative (test_gather_phase3_hold.GatherPhase3HoldTests.test_freshness_never_negative) ... ok
+test_inventory_preserves_freshness (test_gather_phase3_hold.GatherPhase3HoldTests.test_inventory_preserves_freshness) ... ok
+test_new_item_objects (test_gather_phase3_hold.GatherPhase3HoldTests.test_new_item_objects) ... ok
+test_spoiled_exactly_once (test_gather_phase3_hold.GatherPhase3HoldTests.test_spoiled_exactly_once) ... ok
 test_headless_quan_accepts_v12_inventory_with_exit_code_0 (test_inventory_phase3.InventoryPhase3Tests.test_headless_quan_accepts_v12_inventory_with_exit_code_0) ... ok
 test_headless_quan_rejects_counting_inventory_with_exit_code_2 (test_inventory_phase3.InventoryPhase3Tests.test_headless_quan_rejects_counting_inventory_with_exit_code_2) ... ok
 test_v12_empty_inventory_is_valid (test_inventory_phase3.InventoryPhase3Tests.test_v12_empty_inventory_is_valid) ... ok
@@ -145,7 +160,7 @@ test_too_few_members (test_team_check.TeamCheck.test_too_few_members) ... ok
 test_wrong_size_duplicate_and_outsider (test_team_check.TeamCheck.test_wrong_size_duplicate_and_outsider) ... ok
 
 ----------------------------------------------------------------------
-Ran 120 tests in 8.539s
+Ran 135 tests in 8.923s
 
 OK
 

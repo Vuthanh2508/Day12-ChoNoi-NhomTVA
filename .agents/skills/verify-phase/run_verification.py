@@ -21,8 +21,9 @@ def run_tests():
     print("===> [1/3] Đang chạy bộ kiểm thử tự động (Unit & Smoke tests)...")
     env = os.environ.copy()
     env["PYTHONPATH"] = f"tests{os.pathsep}."
+    env["PYTHONUTF8"] = "1"
     cmd = [sys.executable, "-m", "unittest", "discover", "-s", "tests", "-v"]
-    p = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, env=env)
+    p = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, encoding="utf-8", errors="replace", env=env)
     return p.returncode, p.stdout + p.stderr
 
 
