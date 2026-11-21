@@ -94,6 +94,9 @@ class DaySim:
         q_scen = dict(self.scenario.get("quan", {}))
         q_scen["day"] = self.day_plan.get("day", self.day)  # ngày hiệu lực của kế hoạch (lặp D1–D5)
         q_scen["day_plan"] = self.day_plans
+        q_scen["money"] = self.money
+        q_scen["earned"] = self.earned
+        q_scen["reputation"] = self.reputation
         self.sim_quan = QuanSim(self.tuning, q_scen, self.streams, self.ids, inventory=inventory, mode="day")
 
     def _time_left_ticks(self) -> int:
@@ -127,6 +130,7 @@ class DaySim:
         elif self.phase == "quan" and self.sim_quan:
             q_snap = self.sim_quan.snapshot()
             snap.update(q_snap)
+            snap["shift_earned"] = self.sim_quan.shift_earned
         elif self.phase == "shop":
             snap["stock"] = ([dict(i) for i in self.stock] if isinstance(self.stock, list)
                               else dict(self.stock))
@@ -195,10 +199,13 @@ class DaySim:
             events.extend(sub_evs)
             self.sim_tick += 1
             self.phase_tick += 1
+            self.money = self.sim_quan.money
+            self.earned = self.sim_quan.earned
+            self.reputation = self.sim_quan.reputation
 
             if self.sim_quan.done:
-                self.money += self.sim_quan.earned
-                self.earned += self.sim_quan.earned
+                self.money = self.sim_quan.money
+                self.earned = self.sim_quan.earned
                 self.reputation = self.sim_quan.reputation
                 # Chuyển sang shop
                 self.phase = "shop"

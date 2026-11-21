@@ -159,8 +159,8 @@ class QuanSim:
                             s["base_price"] = c["base_price"]
                             break
 
-        self.money = 0
-        self.earned = 0
+        self.money = int(scenario.get("money", 0))
+        self.earned = int(scenario.get("earned", 0))
         self.shift_earned = 0
         self.done = False
         self.reason = None
@@ -219,6 +219,10 @@ class QuanSim:
             "tables": [{"id": tb["id"], "pos": tb["pos"], "customer_id": occupied.get(tb["id"])}
                        for tb in sort_by_id(self.tables)],
             "customers": sort_by_id(self.customers),
+            "money": self.money,
+            "earned": self.earned,
+            "shift_earned": self.shift_earned,
+            "reputation": self.reputation,
         }
 
     def step(self, inp):
@@ -439,6 +443,8 @@ class QuanSim:
             if cust and cust["state"] == "waiting" and self.hand is not None and self.hand.get("order_id") == cust["id"]:
                 patience_max = int(round(self.t["patience_s"] * 60))
                 ratio = cust["patience_ticks_left"] / patience_max
+                if "base_price" in self.hand:
+                    cust["base_price"] = self.hand["base_price"]
                 # Tiền boa = floor(tiền món * 0.2) trên giá đã chốt
                 if ratio >= self.t["tip_min_patience_ratio"]:
                     tip = math.floor(cust["base_price"] * self.t["tip_rate"])
