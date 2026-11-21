@@ -1,6 +1,6 @@
 # Kiểm chứng Phase 3 · Contract v1.2
 
-Bản QA tích hợp main `70463cb` và Quán `5c00e39`. Chạy `python .agents/skills/verify-phase/run_verification.py --phase 3` cho kết quả **120/120 đạt**. [Log regression và SHA-256](../proof/phase-3/smoke_test.txt)
+Bản QA tích hợp main sau PR #15 (sửa code trùng do merge #13/#14) và Quán `5c00e39`. Chạy `python .agents/skills/verify-phase/run_verification.py --phase 3` cho kết quả **135/135 đạt**. [Log regression và SHA-256](../proof/phase-3/smoke_test.txt)
 
 | AC | Ca kiểm chứng đạt |
 |---|---|
