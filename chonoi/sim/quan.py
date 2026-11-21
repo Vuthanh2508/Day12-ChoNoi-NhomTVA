@@ -50,6 +50,13 @@ class QuanSim:
         self.vel = [float(c) for c in p.get("vel", [0.0, 0.0])]
         self._tgt = None
         self._ramp_left = 0
+
+        # Cấu hình độ tươi từ contract/tuning
+        fresh_cfg = tuning.get("freshness", {})
+        self.fresh_initial = float(fresh_cfg.get("initial", 100.0))
+        self.fresh_decay_per_tick = float(fresh_cfg.get("quan_decay_per_s", 0.25)) / TICK
+        self.fresh_spoiled_below = float(fresh_cfg.get("spoiled_below", 30.0))
+
         # Kho quán cá thể: tiếp nhận mảng cá thể [{id, kind, fresh}, ...]
         raw_stock = inventory if inventory is not None else scenario.get("stock", {})
         self._legacy_stock = isinstance(raw_stock, dict)
@@ -60,7 +67,7 @@ class QuanSim:
                 self.stock.append({
                     "id": it["id"],
                     "kind": it["kind"],
-                    "fresh": float(it.get("fresh", 100.0)),
+                    "fresh": float(it.get("fresh", self.fresh_initial)),
                 })
         elif isinstance(raw_stock, dict):
             for k in sorted(raw_stock.keys()):
@@ -69,7 +76,7 @@ class QuanSim:
                     self.stock.append({
                         "id": item_id,
                         "kind": k,
-                        "fresh": 100.0,
+                        "fresh": self.fresh_initial,
                     })
         self.hand = scenario.get("hand")
         self.time_left_ticks = scenario.get("time_left_ticks", int(round(t["duration_s"] * 60)))
@@ -191,7 +198,7 @@ class QuanSim:
         selected_ids = []
         for kind, qty in sorted(recipe.items()):
             available = [it for it in self.stock
-                         if it["kind"] == kind and it["fresh"] >= 30.0 and it["id"] not in excluded_ids and it["id"] not in selected_ids]
+                         if it["kind"] == kind and it["fresh"] >= self.fresh_spoiled_below and it["id"] not in excluded_ids and it["id"] not in selected_ids]
             if len(available) < qty:
                 return None
             # Sắp xếp: fresh cao nhất (-it["fresh"] nhỏ nhất), nếu bằng nhau thì id nhỏ hơn
@@ -257,14 +264,14 @@ class QuanSim:
             elif c["state"] == "eating":
                 c["eat_ticks_left"] = max(0, c["eat_ticks_left"] - 1)
 
-        # Hao tươi kho quán: giảm 0.25 điểm/s (mỗi tick giảm 0.25/60, kẹp đáy 0, dừng khi pause)
+        # Hao tươi kho quán: giảm theo quan_decay_per_s (kẹp đáy 0, dừng khi pause)
         if not self._legacy_stock:
-            decay = FRESH_DECAY_PER_TICK
+            decay = self.fresh_decay_per_tick
             for it in self.stock:
                 it["fresh"] = max(0.0, it["fresh"] - decay)
 
-            # Phát event spoiled {item_id, kind, location: "stock"} theo id khi fresh < 30
-            spoiled_items = [it for it in self.stock if it["fresh"] < 30.0]
+            # Phát event spoiled {item_id, kind, location: "stock"} theo id khi fresh < spoiled_below
+            spoiled_items = [it for it in self.stock if it["fresh"] < self.fresh_spoiled_below]
             if spoiled_items:
                 spoiled_items.sort(key=lambda it: id_key(it["id"]))
                 spoiled_ids = set()

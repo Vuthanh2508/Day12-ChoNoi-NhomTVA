@@ -1,6 +1,10 @@
 === BẰNG CHỨNG KIỂM THỬ PHASE 4 ===
 
 --- 1. KẾT QUẢ UNIT & SMOKE TESTS (Mã thoát: 0) ---
+test_gather_uses_tuning_freshness_config (test_freshness_config.FreshnessConfigTests.test_gather_uses_tuning_freshness_config)
+GatherSim áp dụng đúng initial, gather_decay_per_s, spoiled_below từ tuning. ... ok
+test_quan_uses_tuning_freshness_config (test_freshness_config.FreshnessConfigTests.test_quan_uses_tuning_freshness_config)
+QuanSim áp dụng đúng initial, quan_decay_per_s, spoiled_below từ tuning. ... ok
 test_01_oxygen_decreases_underwater (test_gather_phase1.GatherPhase1Tests.test_01_oxygen_decreases_underwater) ... ok
 test_02_oxygen_refills_at_surface (test_gather_phase1.GatherPhase1Tests.test_02_oxygen_refills_at_surface) ... ok
 test_03_oxygen_is_capped (test_gather_phase1.GatherPhase1Tests.test_03_oxygen_is_capped) ... ok
@@ -170,7 +174,7 @@ test_too_few_members (test_team_check.TeamCheck.test_too_few_members) ... ok
 test_wrong_size_duplicate_and_outsider (test_team_check.TeamCheck.test_wrong_size_duplicate_and_outsider) ... ok
 
 ----------------------------------------------------------------------
-Ran 144 tests in 24.891s
+Ran 146 tests in 24.890s
 
 OK
 

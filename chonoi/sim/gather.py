@@ -50,6 +50,13 @@ class GatherSim:
         self.zero_oxy_ticks = p.get("zero_oxy_ticks", 0)
         self.invuln_ticks = p.get("invuln_ticks", 0)
         self.catch_cd_ticks = p.get("catch_cd_ticks", 0)
+
+        # Cấu hình độ tươi từ contract/tuning
+        fresh_cfg = tuning.get("freshness", {})
+        self.fresh_initial = float(fresh_cfg.get("initial", 100.0))
+        self.fresh_decay_per_tick = float(fresh_cfg.get("gather_decay_per_s", 0.5)) / TICK
+        self.fresh_spoiled_below = float(fresh_cfg.get("spoiled_below", 30.0))
+
         # Phase 3: every collected item has its own ID and freshness.
         self.hold = []
         for raw in scenario.get("hold", []):
@@ -65,7 +72,7 @@ class GatherSim:
                 item = {
                     "id": ids.new("I"),
                     "kind": raw,
-                    "fresh": 100.0,
+                    "fresh": self.fresh_initial,
                 }
             self.hold.append(item)
         self.time_left_ticks = scenario.get("time_left_ticks", int(round(t["duration_s"] * TICK)))
@@ -371,7 +378,7 @@ class GatherSim:
             {
                 "id": self.ids.new("I"),
                 "kind": kind,
-                "fresh": 100.0,
+                "fresh": self.fresh_initial,
             }
             for _ in range(quantity)
         ]
@@ -411,14 +418,14 @@ class GatherSim:
             }))
 
     def _update_freshness(self, events):
-        decay = 0.5 / TICK
+        decay = self.fresh_decay_per_tick
         for item in self.hold:
             before = float(item["fresh"])
             after = max(0.0, before - decay)
             item["fresh"] = after
 
             # Compare raw floating-point values, before display rounding.
-            if before >= 30.0 and after < 30.0:
+            if before >= self.fresh_spoiled_below and after < self.fresh_spoiled_below:
                 events.append(("spoiled", {
                     "item_id": item["id"],
                     "kind": item["kind"],
