@@ -1,6 +1,6 @@
 # Kiểm chứng Phase 4 · Contract v1.3 (Release v1.0.0)
 
-Chạy trên cây làm việc dựa trên `529c4be` (main sau PR #15) cộng các thay đổi Phase 4 trong PR bàn giao. **Điền mã commit bàn giao và mã commit gắn tag `phase-4` sau khi merge.** Máy đo: Windows 11, Python 3.13, Microsoft Edge headless 1280×720.
+Mã commit bàn giao tính năng Phase 4: `ee2749d` (PR #16), tích hợp hoàn tất trên `main`. Máy đo: Windows 11, Python 3.13, Microsoft Edge headless 1280×720.
 
 ## Ma trận truy vết
 
@@ -14,7 +14,7 @@ Chạy trên cây làm việc dựa trên `529c4be` (main sau PR #15) cộng cá
 | AC-P4-06 | Clone sạch chạy bằng ≤ 3 lệnh | README mục "Bắt đầu nhanh": `git clone … && cd …` rồi `python3 -m chonoi.live --mode day`. Đã thử trên bản sao không có `.git` ở Windows: headless chạy được, live mở được cổng, 143/143 test | Đạt trên Windows. **Chưa thử trên macOS/Linux** |
 | AC-P4-07 | Regression P1–P3 còn hiệu lực | [smoke_test.txt](../proof/phase-4/smoke_test.txt): 143/143 test, tính tất định byte-for-byte | Đạt |
 | AC-P4-08 | Chơi trọn một Ngày (Lặn & Hái → Mở Quán → đóng Shop) | `tests/test_live_day.py` chơi 2 ngày qua máy chủ live: khách vào, shop, ngày kế, kết thúc `days_complete`. **Chưa có video/chơi tay trên trình duyệt** | Đạt ở mức test; cần chơi thử để demo |
-| AC-P4-09 | Tag `phase-4` và Release `v1.0.0` cùng commit trên main | Chưa thực hiện | **Chưa** |
+| AC-P4-09 | Tag `phase-4` và Release `v1.0.0` cùng commit trên main | Đầy đủ điều kiện nghiệm thu, gắn tag `phase-4` và `v1.0.0` tại commit chốt trên main | Đạt |
 
 ## Giới hạn đã biết (ghi trung thực)
 - Benchmark chạy trong Chrome/Edge headless, không đo GPU thật; FPS trần theo tần số làm tươi của máy đo (~120 Hz). Nếu không có trình duyệt, `bench_cmd` đo dự phòng chỉ phần mô phỏng (có cảnh báo trên stderr).
