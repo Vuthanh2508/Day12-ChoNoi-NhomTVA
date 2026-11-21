@@ -1,6 +1,6 @@
 """Cửa sổ chơi trực tiếp bằng TRÌNH DUYỆT, chỉ dùng thư viện chuẩn Python.
 
-    python3 -m chonoi.live --mode gather|quan [--seed N] [--port 8000]
+    python3 -m chonoi.live --mode day|gather|quan [--seed N] [--port 8000] [--days 5]
 
 Máy chủ HTTP nhỏ (ThreadingHTTPServer) phục vụ `chonoi/web/index.html` và hai API:
     GET  /state  -> snapshot JSON hiện tại (cùng trường như dòng snapshot của headless) + `meta` + `events`
@@ -16,6 +16,7 @@ import argparse
 import json
 import os
 import sys
+import queue
 import threading
 import time
 import traceback
@@ -23,7 +24,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 from .contract import load_contract
 from .errors import BadInput
-from .inputs import LiveInputs
+from .inputs import InputState, LiveInputs
 from .inventory import read_inventory
 from .runner import Session
 from .scenario import load_scenario
@@ -31,25 +32,29 @@ from .scenario import load_scenario
 WEB_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "web")
 TICK_S = 1.0 / 60.0
 MAX_BODY = 4096
+MAX_BODY_BENCH = 1 << 20  # /bench nhận mảng thời gian khung hình
 RECENT_EVENTS = 40
 
 
 class LiveGame:
     """Một lượt chơi + luồng nền bước 60 tick/s. Mọi truy cập trạng thái đi qua khóa."""
 
-    def __init__(self, mode, tuning, scenario, seed, inventory=None, inventory_out=None):
-        self._args = (mode, tuning, scenario, seed, inventory)
+    def __init__(self, mode, tuning, scenario, seed, inventory=None, inventory_out=None, days=5):
+        self._args = (mode, tuning, scenario, seed, inventory, days)
         self.mode = mode
         self.tuning = tuning
         self.inventory_out = inventory_out
         self._lock = threading.Lock()
+        self.bench_events = queue.Queue()
         self._stop = threading.Event()
         self._thread = None
         self._reset()
 
     def _reset(self):
         self.session = Session(*self._args)
-        self.inputs = LiveInputs()
+        self.inputs = LiveInputs(buttons=("interact", "catch"))
+        self._pulses = set()  # nút cạnh lên một lần: pause, shop_done
+        self._buy = None
         self.events = []
         self._saved = False
         self.error = None
@@ -86,7 +91,11 @@ class LiveGame:
         s = self.session
         if s.done:
             return
-        for row in s.step(self.inputs.advance()):
+        st = self.inputs.advance()
+        edges = set(st._edges) | self._pulses
+        raw = {"buy": self._buy} if self._buy else {}
+        self._pulses, self._buy = set(), None
+        for row in s.step(InputState(st.move, st.held, edges, raw=raw)):
             self.events.append(row)
         del self.events[:-RECENT_EVENTS]
         if s.done and not self._saved:
@@ -101,7 +110,12 @@ class LiveGame:
     def state_json(self) -> bytes:
         with self._lock:
             snap = self.session.snapshot()
-            snap["meta"] = self.tuning[self.mode]
+            phase = snap.get("phase")
+            key = phase if phase in ("gather", "quan") else ("quan" if self.mode == "quan" else "gather")
+            meta = dict(self.tuning[key])
+            meta["menu"] = self.tuning.get("menu", {})
+            meta["upgrades"] = self.tuning.get("shop", {}).get("upgrades", {})
+            snap["meta"] = meta
             snap["events"] = list(self.events)
             snap["finished"] = self.session.done
             snap["reason"] = self.session.sim.reason if self.session.done else None
@@ -121,8 +135,18 @@ class LiveGame:
                 if not isinstance(body[b], bool):
                     raise ValueError(f"{b} phải là boolean")
                 buttons[b] = body[b]
+        for b in ("pause", "shop_done"):
+            if b in body and not isinstance(body[b], bool):
+                raise ValueError(f"{b} phải là boolean")
+        if "buy" in body and not isinstance(body["buy"], str):
+            raise ValueError("buy phải là chuỗi")
         with self._lock:
             self.inputs.set(move, **buttons)
+            for b in ("pause", "shop_done"):
+                if body.get(b):
+                    self._pulses.add(b)
+            if body.get("buy"):
+                self._buy = body["buy"]
 
     def restart(self):
         with self._lock:
@@ -163,7 +187,7 @@ class _Handler(BaseHTTPRequestHandler):
             n = int(self.headers.get("Content-Length") or 0)
         except ValueError:
             n = -1
-        if n < 0 or n > MAX_BODY:
+        if n < 0 or n > (MAX_BODY_BENCH if path == "/bench" else MAX_BODY):
             self._send(400, b'{"error":"body sai"}')
             return
         raw = self.rfile.read(n) if n else b""
@@ -173,6 +197,10 @@ class _Handler(BaseHTTPRequestHandler):
                 if not isinstance(body, dict):
                     raise ValueError("body phải là object")
                 self.game.set_input(body)
+            elif path == "/bench":
+                body = json.loads(raw.decode("utf-8") or "{}")
+                if isinstance(body, dict) and body.get("event"):
+                    self.game.bench_events.put(body)
             elif path == "/restart":
                 self.game.restart()
             else:
@@ -184,13 +212,19 @@ class _Handler(BaseHTTPRequestHandler):
         self._send(200, b'{"ok":true}')
 
 
+class _QuietServer(ThreadingHTTPServer):
+    def handle_error(self, request, client_address):  # trình duyệt đóng kết nối giữa chừng: bỏ qua
+        if not isinstance(sys.exc_info()[1], (ConnectionError, BrokenPipeError)):
+            super().handle_error(request, client_address)
+
+
 class LiveServer:
     """Máy chủ + mô phỏng. port=0 -> cổng ngẫu nhiên (đọc `.port`)."""
 
     def __init__(self, game: LiveGame, host="127.0.0.1", port=8000):
         handler = type("Handler", (_Handler,), {"game": game})
         self.game = game
-        self.httpd = ThreadingHTTPServer((host, port), handler)
+        self.httpd = _QuietServer((host, port), handler)
         self.httpd.daemon_threads = True
         self.host = host
         self.port = self.httpd.server_address[1]
@@ -215,7 +249,8 @@ class LiveServer:
 
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(prog="chonoi.live", description="Chơi trực tiếp trên trình duyệt (starter).")
-    p.add_argument("--mode", required=True, choices=["gather", "quan"])
+    p.add_argument("--mode", required=True, choices=["day", "gather", "quan"])
+    p.add_argument("--days", type=int, default=5, help="chỉ với day: số ngày chơi (tối đa 5)")
     p.add_argument("--seed", type=int, default=1)
     p.add_argument("--port", type=int, default=8000, help="0 = cổng ngẫu nhiên")
     p.add_argument("--host", default="127.0.0.1")
@@ -233,7 +268,7 @@ def main(argv=None) -> int:
         inventory = read_inventory(a.inventory) if a.inventory else None
         if inventory is not None and "stock" in scenario:
             raise BadInput("vừa có quan.stock vừa có --inventory")
-        game = LiveGame(a.mode, tuning, scenario, a.seed, inventory, a.inventory_out)
+        game = LiveGame(a.mode, tuning, scenario, a.seed, inventory, a.inventory_out, a.days)
         server = LiveServer(game, a.host, a.port)
     except BadInput as e:
         sys.stderr.write(f"đầu vào sai: {e}\n")
