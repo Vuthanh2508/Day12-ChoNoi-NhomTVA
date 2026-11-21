@@ -20,14 +20,14 @@ Cách làm việc kỹ thuật là **tự do** (push thẳng, nhánh + PR, pair,
 Từ clone sạch (macOS/Linux), **3 lệnh** để chơi:
 
 ```bash
-git clone https://github.com/Vuthanh2508/Day12-ChoNoi-NhomTVA.git && cd Day12-ChoNoi-NhomTVA
+git clone https://github.com/Vuthanh2508/K5-L3B-LAB-Day12-AI-SDLC-NhomTVA.git && cd K5-L3B-LAB-Day12-AI-SDLC-NhomTVA
 python3 -m chonoi.live --mode day      # mở http://127.0.0.1:8000 — chơi trọn 5 ngày: lặn & hái → mở quán → shop
 ```
 
 Các lệnh khác:
 
 ```bash
-PYTHONPATH=tests:. python3 -m unittest discover -s tests -v                  # toàn bộ test (143)
+PYTHONPATH=tests:. python3 -m unittest discover -s tests -v                  # toàn bộ test (144)
 python3 -m chonoi.headless --mode day --seed 42 --ticks 600 --out out.jsonl --days 1   # headless theo Test Contract
 python3 -m chonoi.bench --seed 42 --duration 30 --out bench.json             # benchmark có render (Chrome/Edge headless 1280×720)
 python3 -m chonoi.soak --seed 7 --days 10 --out soak.json                    # soak 10 ngày một tiến trình

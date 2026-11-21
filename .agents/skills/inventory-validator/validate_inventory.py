@@ -12,6 +12,7 @@ Quy tắc Contract G v1.3:
 """
 
 import json
+import math
 import os
 import sys
 
@@ -59,10 +60,10 @@ def validate_inventory_file(path: str):
                 return False, f"ID bị trùng lặp: '{item_id}'", {}
             seen_ids.add(item_id)
             kind = it.get("kind")
-            if kind not in ALLOWED_KINDS:
+            if not isinstance(kind, str) or kind not in ALLOWED_KINDS:
                 return False, f"Nguyên liệu lạ không thuộc danh mục cho phép: '{kind}'", {}
             fresh = it.get("fresh")
-            if isinstance(fresh, bool) or not isinstance(fresh, (int, float)) or fresh < 0 or fresh > 100:
+            if isinstance(fresh, bool) or not isinstance(fresh, (int, float)) or not math.isfinite(fresh) or fresh < 0 or fresh > 100:
                 return False, f"Độ tươi của item {item_id} phải trong [0, 100], đang là: {fresh!r}", {}
             if fresh >= 30:
                 counts[kind] = counts.get(kind, 0) + 1
