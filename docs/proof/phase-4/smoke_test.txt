@@ -170,13 +170,19 @@ test_time_ends_gather_and_keeps_hold (test_smoke_p1.Movement.test_time_ends_gath
 test_khoi_sai_mode_exit_2 (test_smoke_p1.ScenarioModes.test_khoi_sai_mode_exit_2) ... ok
 test_quan_fixture_khong_hop_le_exit_2 (test_smoke_p1.ScenarioModes.test_quan_fixture_khong_hop_le_exit_2) ... ok
 test_quan_player_vel_hop_le (test_smoke_p1.ScenarioModes.test_quan_player_vel_hop_le) ... ok
+test_gather_sprint_speed_multiplier (test_sprint_and_early_close.SprintAndEarlyCloseTests.test_gather_sprint_speed_multiplier)
+Kiểm tra GatherSim tăng tốc độ bơi 1.6x khi có sprint. ... ok
+test_quan_early_close_10s_after_all_customers_done (test_sprint_and_early_close.SprintAndEarlyCloseTests.test_quan_early_close_10s_after_all_customers_done)
+Kiểm tra điều kiện đóng ca sau 10s (600 ticks) khi hết khách theo kế hoạch ngày. ... ok
+test_quan_sprint_speed_multiplier (test_sprint_and_early_close.SprintAndEarlyCloseTests.test_quan_sprint_speed_multiplier)
+Kiểm tra QuanSim tăng tốc độ đi bộ 1.6x khi có sprint. ... ok
 test_good (test_team_check.TeamCheck.test_good) ... ok
 test_template_is_rejected (test_team_check.TeamCheck.test_template_is_rejected) ... ok
 test_too_few_members (test_team_check.TeamCheck.test_too_few_members) ... ok
 test_wrong_size_duplicate_and_outsider (test_team_check.TeamCheck.test_wrong_size_duplicate_and_outsider) ... ok
 
 ----------------------------------------------------------------------
-Ran 147 tests in 24.873s
+Ran 150 tests in 26.380s
 
 OK
 

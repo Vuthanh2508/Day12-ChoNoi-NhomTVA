@@ -103,6 +103,7 @@ class QuanSim:
             ids.reserve(tb["id"])
 
         self.customers = []
+        self._closing_soon = False
         patience_max = int(round(t["patience_s"] * 60))
         for c in scenario.get("customers", []):
             ids.reserve(c["id"])
@@ -230,6 +231,8 @@ class QuanSim:
             "earned": self.earned,
             "shift_earned": self.shift_earned,
             "reputation": self.reputation,
+            "closing_soon": self._closing_soon,
+            "time_left_ticks": self.time_left_ticks,
         }
 
     def step(self, inp):
@@ -356,6 +359,20 @@ class QuanSim:
         # 6. Khách mới theo lịch
         if self.time_left_ticks > 0 and self.random_customers:
             self._spawn_customer(events)
+
+        # 7. Điều kiện kết thúc sớm khi đã hoàn thành hết khách trong ngày (10s sau khi hoàn thành)
+        if self.mode == "day" and self.day_plan and self.planned_dishes is not None:
+            if bool(self.planned_dishes) and self.phase_tick >= self.t.get("first_customer_tick", 60):
+                all_spawned = all(cnt <= 0 for cnt in self.planned_dishes.values())
+                all_done = (len(self.customers) == 0 and len(self.reservations) == 0)
+                if all_spawned and all_done and not self._closing_soon:
+                    self._closing_soon = True
+                    if self.time_left_ticks > 600:
+                        self.time_left_ticks = 600
+                    events.append(("all_customers_done", {
+                        "ticks_left": self.time_left_ticks,
+                        "seconds_left": int(math.ceil(self.time_left_ticks / 60)),
+                    }))
 
         return events
 
@@ -630,6 +647,11 @@ class QuanSim:
 
     def _move(self, inp):
         speed = self.t["walk_speed"]
+        sprint = (getattr(inp, "sprint", False) or
+                  (hasattr(inp, "raw") and isinstance(inp.raw, dict) and inp.raw.get("sprint", False)) or
+                  (hasattr(inp, "held") and isinstance(inp.held, dict) and inp.held.get("sprint", False)))
+        if sprint:
+            speed *= 1.6
         mx, mz = inp.move
         self.vel = ramp_velocity(self, (mx * speed, mz * speed), int(self.t.get("ramp_max_ticks", 6)))
         b = self.t["bounds"]

@@ -55,6 +55,7 @@ class LiveGame:
         self.inputs = LiveInputs(buttons=("interact", "catch"))
         self._pulses = set()  # nút cạnh lên một lần: pause, shop_done
         self._buy = None
+        self._sprint = False
         self.events = []
         self._saved = False
         self.error = None
@@ -94,6 +95,8 @@ class LiveGame:
         st = self.inputs.advance()
         edges = set(st._edges) | self._pulses
         raw = {"buy": self._buy} if self._buy else {}
+        if self._sprint:
+            raw["sprint"] = True
         self._pulses, self._buy = set(), None
         for row in s.step(InputState(st.move, st.held, edges, raw=raw)):
             self.events.append(row)
@@ -138,10 +141,15 @@ class LiveGame:
         for b in ("pause", "shop_done"):
             if b in body and not isinstance(body[b], bool):
                 raise ValueError(f"{b} phải là boolean")
+        if "sprint" in body:
+            if not isinstance(body["sprint"], bool):
+                raise ValueError("sprint phải là boolean")
         if "buy" in body and not isinstance(body["buy"], str):
             raise ValueError("buy phải là chuỗi")
         with self._lock:
             self.inputs.set(move, **buttons)
+            if "sprint" in body:
+                self._sprint = bool(body["sprint"])
             for b in ("pause", "shop_done"):
                 if body.get(b):
                     self._pulses.add(b)

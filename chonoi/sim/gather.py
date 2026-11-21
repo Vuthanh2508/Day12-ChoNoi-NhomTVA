@@ -644,6 +644,11 @@ class GatherSim:
 
     def _move(self, inp):
         speed = self.t["swim_speed"]
+        sprint = (getattr(inp, "sprint", False) or
+                  (hasattr(inp, "raw") and isinstance(inp.raw, dict) and inp.raw.get("sprint", False)) or
+                  (hasattr(inp, "held") and isinstance(inp.held, dict) and inp.held.get("sprint", False)))
+        if sprint:
+            speed *= 1.6
         mx, md = inp.move
         self.vel = ramp_velocity(self, (mx * speed, md * speed), int(self.t["ramp_max_ticks"]))
         if (mx, md) != (0.0, 0.0):
