@@ -22,14 +22,14 @@
     - Tính năng Accessibility (tương phản cao, 3 cảnh báo trực quan) và mở rộng cho nhóm 5 người (phụ đề SFX, dòng nước lũ) chạy ổn định và giữ vững tính tất định byte-by-byte.
   - **Điều tệ:**
     - Khi merge PR #13 và PR #14 ở Phase 3 xuất hiện xung đột kiểu dữ liệu giữa biến `current_direction` (int vs None) gây fail một test biên ở `gather.py:677`, nhóm phải mất thêm 1 PR hotfix #15 để xử lý triệt để.
-    - Bạn Hoàng gặp trục trặc đường truyền mạng cục bộ nên một số commit phải thực hiện dưới hình thức ghép cặp (pair programming) cùng Integrator, dẫn đến số commit độc lập ghi nhận trên tài khoản cá nhân ít hơn các bạn khác.
+    - Trong quá trình phát triển, bạn Hoàng gặp một số trục trặc mạng cục bộ nên ban đầu thực hiện ghép cặp (pair programming) cùng Integrator; đến cuối Phase 4 bạn đã kịp thời hoàn thiện và push đầy đủ 3 commit độc lập theo đúng quy định.
 - Số liệu: số commit theo người, cách đọc code của nhau, token theo người:
   - **Số commit theo người (tổng hợp qua các nhánh và merge PR):**
-    - Vũ Thành (`Vuthanh2508`): 26 commits (Khởi tạo repo, Contract v1.0–v1.3, tích hợp, AI skills, bench, soak, live day, hồ sơ release)
+    - Vũ Thành (`Vuthanh2508`): 27 commits (Khởi tạo repo, Contract v1.0–v1.3, tích hợp, AI skills, bench, soak, live day, hồ sơ release)
     - Nguyễn Công Hoàn (`hoan11052004`): 10 commits (QA test suites, kiểm thử chấp nhận P1–P4, UI accessibility)
     - Trần Đức Trung (`kientrungtd135` / `Tran Duc Trung`): 7 commits (Lát Gather: cơ chế bơi, đàn cá, cá sấu, dòng lũ, giỏ cá thể)
     - Đỗ Việt Anh (`vietahnn` / `vietanh`): 10 commits (Lát Quán: 2 bếp 4 bàn, thực đơn 6 món, hao tươi kho, phục vụ, giá & tip)
-    - Nguyễn Phi Hoàng (`phihoang1709`): 2 commits độc lập + các commit co-authored pair programming (Giao diện Web Canvas, HUD, theme Tây Nam Bộ)
+    - Nguyễn Phi Hoàng (`phihoang1709`): 3 commits độc lập (`cad0b9a` cập nhật UI P1, `f9e7bd0` cập nhật UI P2, `ca2ba42` cập nhật docs P4) + các commit pair programming (Giao diện Web Canvas, HUD, theme Tây Nam Bộ)
   - **Cách đọc code của nhau:**
     - Review chéo PR theo cặp module liền kề: `sim/gather` đọc `sim/quan`, QA đọc cả hai module; Integrator rà soát tổng thể hợp đồng và chạy regression test trước khi merge vào nhánh `main`.
   - **Ước tính token AI sử dụng:**
