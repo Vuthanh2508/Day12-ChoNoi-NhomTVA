@@ -11,9 +11,9 @@
 | Thành viên | Trách nhiệm | File cần sửa | Test liên quan | Đầu ra kỳ vọng |
 |---|---|---|---|---|
 | **Vũ Thành** (`integration`) | Integrator / Release Lead | `game.contract.json`, `chonoi/contract.py`, `chonoi/inventory.py`, `chonoi/sim/day.py`, `docs/plan/phase-3.md`, `CHANGELOG.md` | `test_inventory_phase3.py`, `test_smoke_p1.py`, `verify-phase` | Contract v1.2, schema kho cá thể, từ chối kho đếm mã 2, cấp id I1..In xuyên ngày |
-| **Trần Đức Trung** (`gather`) | Lát 1: Lặn & Dòng lũ | `chonoi/sim/gather.py` | `test_gather_phase3_freshness.py`, `test_gather_phase3_current.py` | Giỏ cá thể, hao tươi 0.5/s, event spoiled, LIFO khi ngất/hit, Dòng lũ current 1800k |
-| **Đỗ Việt Anh** (`quan`) | Lát 2: Quán & Độ tươi | `chonoi/sim/quan.py` | `test_quan_phase3_freshness.py`, `test_quan_phase3_pricing.py` | Kho cá thể, hao 0.25/s, giữ theo id tươi nhất, thử giữ lại khi ươn, chốt base_price theo fresh |
-| **Nguyễn Phi Hoàng** (`web`) | HUD / Frontend | `chonoi/web/index.html`, `chonoi/web/` | Chơi trực tiếp trên trình duyệt | Hiển thị độ tươi, cảnh báo hàng ươn < 30, cảnh báo dòng lũ |
+| **Trần Đức Trung** (`sim/gather`) | Lát 1: Lặn & Dòng lũ | `chonoi/sim/gather.py` | `test_gather_phase3_freshness.py`, `test_gather_phase3_current.py` | Giỏ cá thể, hao tươi 0.5/s, event spoiled, LIFO khi ngất/hit, Dòng lũ current 1800k |
+| **Đỗ Việt Anh** (`sim/quan`) | Lát 2: Quán & Độ tươi | `chonoi/sim/quan.py` | `test_quan_phase3_freshness.py`, `test_quan_phase3_pricing.py` | Kho cá thể, hao 0.25/s, giữ theo id tươi nhất, thử giữ lại khi ươn, chốt base_price theo fresh |
+| **Nguyễn Phi Hoàng** (`chonoi/web`) | HUD / Frontend | `chonoi/web/index.html`, `chonoi/web/` | Chơi trực tiếp trên trình duyệt | Hiển thị độ tươi, cảnh báo hàng ươn < 30, cảnh báo dòng lũ |
 | **Nguyễn Công Hoàn** (`qa`) | QA & Kiểm thử biên | `tests/test_phase3_qa.py`, `docs/verification/phase-3.md` | Chạy bộ test v1.2, xuất log `docs/proof/phase-3/smoke_test.txt` | 100% test pass, kiểm tra tính tất định SHA-256 |
 
 ## 3. Quyết định kỹ thuật & Quy trình tích hợp

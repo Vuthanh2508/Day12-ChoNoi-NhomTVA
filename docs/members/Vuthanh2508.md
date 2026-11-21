@@ -1,4 +1,4 @@
-# Vuthanh2508 — phản tư cá nhân (≤ 200 từ)
+# Vũ Thành (Vuthanh2508) — phản tư cá nhân (≤ 200 từ)
 
 - **Tôi đã làm (kèm link commit):**
   - Khởi tạo fork repo, phân vai và thống nhất thỏa thuận làm việc nhóm trong [TEAM.md](../../TEAM.md).
