@@ -14,7 +14,7 @@
 | **Trần Đức Trung** (`gather`) | Lát 1: Lặn & Dòng lũ | `chonoi/sim/gather.py` | `test_gather_phase3_freshness.py`, `test_gather_phase3_current.py` | Giỏ cá thể, hao tươi 0.5/s, event spoiled, LIFO khi ngất/hit, Dòng lũ current 1800k |
 | **Đỗ Việt Anh** (`quan`) | Lát 2: Quán & Độ tươi | `chonoi/sim/quan.py` | `test_quan_phase3_freshness.py`, `test_quan_phase3_pricing.py` | Kho cá thể, hao 0.25/s, giữ theo id tươi nhất, thử giữ lại khi ươn, chốt base_price theo fresh |
 | **Nguyễn Phi Hoàng** (`web`) | HUD / Frontend | `chonoi/web/index.html`, `chonoi/web/` | Chơi trực tiếp trên trình duyệt | Hiển thị độ tươi, cảnh báo hàng ươn < 30, cảnh báo dòng lũ |
-| **Lê Bá Hoàn** (`qa`) | QA & Kiểm thử biên | `tests/test_phase3_qa.py`, `docs/verification/phase-3.md` | Chạy bộ test v1.2, xuất log `docs/proof/phase-3/smoke_test.txt` | 100% test pass, kiểm tra tính tất định SHA-256 |
+| **Nguyễn Công Hoàn** (`qa`) | QA & Kiểm thử biên | `tests/test_phase3_qa.py`, `docs/verification/phase-3.md` | Chạy bộ test v1.2, xuất log `docs/proof/phase-3/smoke_test.txt` | 100% test pass, kiểm tra tính tất định SHA-256 |
 
 ## 3. Quyết định kỹ thuật & Quy trình tích hợp
 1. **Thứ tự tích hợp:**
