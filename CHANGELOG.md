@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Phase 4] - 2026-11-21 (Contract v1.3, Release v1.0.0)
+### Added
+- **Contract v1.3:** khai `bench_cmd` (`python3 -m chonoi.bench`) và `soak_cmd` (`python3 -m chonoi.soak`) ở gốc `game.contract.json`; `run_cmd` chạy `--mode day`. Gameplay, tuning, kho và JSONL giữ nguyên v1.2.
+- **Benchmark có render** (`chonoi/bench.py`): Chrome/Edge headless 1280×720, làm nóng 3 s rồi đo, xuất `avg_fps, p1_low_fps, frames, measured_s, load_ms`.
+- **Soak headless** (`chonoi/soak.py`): N Ngày trong một tiến trình bằng bot tất định; kế hoạch D1–D5 lặp ở Ngày 6–10; xuất `days, days_completed, crashes, results, duration_s`.
+- **Live `--mode day`:** chơi trọn vòng ngày trên trình duyệt (sáng → quán → shop), nhận `pause`/`buy`/`shop_done`.
+- UI: cảnh báo oxy/thủy quái/khách sắp giận, chế độ tương phản cao, phụ đề SFX.
+### Fixed
+- Dọn code trùng sau merge #13/#14 trong `sim/gather.py` (crash dòng lũ, vật phẩm nhân đôi, hao tươi gấp đôi).
+- Snapshot pha shop không còn văng lỗi với kho cá thể; nâng cấp ở shop không còn ghi đè tuning dùng chung; thủy quái theo `from_day` hoạt động trong mode day.
+
 ## [Phase 3] - 2026-11-21 (Contract v1.2)
 ### Breaking Changes
 - **Chuyển đổi Schema Kho:** Kho đếm theo loại (`{"items": {kind: count}}`) chính thức bị thay thế bởi **kho cá thể** (`{"items": [{"id": "I1", "kind": "ca_linh", "fresh": 100}, ...]}`).

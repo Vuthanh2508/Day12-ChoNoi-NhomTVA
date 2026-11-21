@@ -35,7 +35,8 @@ class Phase3InventoryAndCurrentQATests(unittest.TestCase):
         return code, stderr, read_jsonl(out) if code == 0 else []
 
     def test_v12_inventory_accepts_individuals_and_rejects_legacy_counts(self):
-        self.assertEqual(load_contract()["contract_version"], "1.2")
+        # v1.3 (Phase 4) giữ nguyên gameplay/tuning/kho/JSONL của v1.2, chỉ thêm bench_cmd/soak_cmd
+        self.assertEqual(load_contract()["contract_version"], "1.3")
 
     def test_inventory_file_accepts_individual_item_schema(self):
         valid = self.path("individuals.json")

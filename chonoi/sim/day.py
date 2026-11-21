@@ -25,8 +25,7 @@ class DaySim:
         self.active_upgrades = dict(day_scen.get("active_upgrades", self.upgrades))
 
         self.day_plans = list(day_scen.get("day_plan", tuning.get("day_plan", [])))
-        self.day_plan = next((p for p in self.day_plans if p.get("day") == self.day),
-                             {"day": self.day, "dishes": {}, "ingredients": {}})
+        self.day_plan = self._plan_for(self.day)
 
         self.phase = "gather"
         self.paused = False
@@ -45,9 +44,18 @@ class DaySim:
         self.sim_quan = None
         self._init_gather()
 
+    def _plan_for(self, day):
+        """Kế hoạch ngày; từ Ngày 6 trở đi lặp lại D1–D5 (Contract v1.3, soak 10 ngày)."""
+        n = max((p.get("day", 0) for p in self.day_plans), default=0)
+        eff = ((day - 1) % n) + 1 if n else day
+        return next((p for p in self.day_plans if p.get("day") == eff),
+                    {"day": day, "dishes": {}, "ingredients": {}})
+
     def _init_gather(self):
         g_scen = dict(self.scenario.get("gather", {}))
+        g_scen.setdefault("day", self.day)  # thủy quái xuất hiện theo from_day
         g_tuning = dict(self.tuning)
+        g_tuning["gather"] = dict(self.tuning["gather"])  # không sửa tuning dùng chung
 
         # Cấp id mới xuyên ngày theo thứ tự mảng (Contract v1.2)
         if self.day > 1 and "hold" in g_scen:
@@ -84,7 +92,7 @@ class DaySim:
 
     def _init_quan(self, inventory):
         q_scen = dict(self.scenario.get("quan", {}))
-        q_scen["day"] = self.day
+        q_scen["day"] = self.day_plan.get("day", self.day)  # ngày hiệu lực của kế hoạch (lặp D1–D5)
         q_scen["day_plan"] = self.day_plans
         self.sim_quan = QuanSim(self.tuning, q_scen, self.streams, self.ids, inventory=inventory, mode="day")
 
@@ -120,7 +128,8 @@ class DaySim:
             q_snap = self.sim_quan.snapshot()
             snap.update(q_snap)
         elif self.phase == "shop":
-            snap["stock"] = dict(self.stock)
+            snap["stock"] = ([dict(i) for i in self.stock] if isinstance(self.stock, list)
+                              else dict(self.stock))
 
         # Đảm bảo các trường gốc của ngày không bị ghi đè bởi sub-sim
         snap["day"] = self.day
@@ -211,15 +220,14 @@ class DaySim:
                 events.append(("shop_end", {"reason": reason}))
                 self.days_completed += 1
 
-                if self.days_completed >= self.days or self.day >= 5:
+                if self.days_completed >= self.days:
                     self.done = True
                     self.reason = "days_complete"
                 else:
                     # Bắt đầu ngày mới
                     self.day += 1
                     self.active_upgrades = dict(self.upgrades)
-                    self.day_plan = next((p for p in self.day_plans if p.get("day") == self.day),
-                                         {"day": self.day, "dishes": {}, "ingredients": {}})
+                    self.day_plan = self._plan_for(self.day)
                     self.phase = "gather"
                     self.phase_tick = 0
                     self.stock = {}

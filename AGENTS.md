@@ -5,6 +5,9 @@
 ## Lệnh
 - Test: `PYTHONPATH=tests:. python3 -m unittest discover -s tests -v`
 - Headless: `python3 -m chonoi.headless --mode gather|quan --seed 1 --ticks 600 --out out.jsonl`
+- Bench (có render, cần Chrome/Edge): `python3 -m chonoi.bench --seed 42 --duration 30 --out bench.json`
+- Soak 10 ngày: `python3 -m chonoi.soak --seed 7 --days 10 --out soak.json`
+- Chơi trọn game trên trình duyệt: `python3 -m chonoi.live --mode day`
 - Chơi thử trên trình duyệt: `python3 -m chonoi.live --mode gather|quan` (mở địa chỉ in ra; WASD, E, Space, R)
 
 ## Cấu trúc & quy ước
