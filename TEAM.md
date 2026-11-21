@@ -6,8 +6,8 @@
 |---|---|---|---|---|
 | Trần Đức Trung | kientrungtd135 | `sim/gather` | Dev Lead (Gather) | Đỗ Việt Anh (`sim/quan`) |
 | Đỗ Việt Anh | vietahnn | `sim/quan` | PO (Product Owner) | Trần Đức Trung (`sim/gather`) |
-| Nguyễn Phi Hoàng | phihoang1709  | `client/ui` | UI Lead / Frontend | Nguyễn Công Hoàn (`qa`) |
-| Nguyễn Công Hoàn | hoan11052004 | `qa` | QA Lead | Nguyễn Phi Hoàng (`client/ui`) |
+| Nguyễn Phi Hoàng | phihoang1709  | `chonoi/web` | UI Lead / Frontend | Nguyễn Công Hoàn (`qa`) |
+| Nguyễn Công Hoàn | hoan11052004 | `qa` | QA Lead | Nguyễn Phi Hoàng (`chonoi/web`) |
 | Vũ Thành | Vuthanh2508 | `integration` | Integrator / Release | Cả nhóm (hỗ trợ tích hợp) |
 
 **Vai quy trình:** PO (đầu mối hỏi giảng viên, giữ `docs/clarify.md`) · Integrator (giữ `docs/contracts/`, gắn tag) · QA lead · Scrum/Release. Có thể kiêm.
