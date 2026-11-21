@@ -52,7 +52,7 @@ def run_soak(seed, days):
             if r["name"] == "shop_end":
                 sim = sess.sim
                 results.append({"day": sim.days_completed, "earned": sim.earned, "reputation": sim.reputation,
-                                "score": sim.earned + mult * math.floor(sim.reputation)})
+                                "score": int(round(sim.earned + mult * sim.reputation))})
     return {"days": days, "days_completed": sess.sim.days_completed, "crashes": crashes,
             "results": results, "duration_s": round(time.perf_counter() - t0, 3)}
 

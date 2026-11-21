@@ -60,5 +60,35 @@ class SoakTests(unittest.TestCase):
         self.assertEqual(set(a["results"][0]), {"day", "earned", "reputation", "score"})
 
 
+class ScoreFormulaTests(unittest.TestCase):
+    def test_decimal_reputation_score_calculation(self):
+        """Kiểm tra công thức score tính đúng phần thập phân của reputation (không bị floor mất điểm)."""
+        from chonoi.runner import _common
+
+        class MockSim:
+            mode = "quan"
+            phase = "quan"
+            time_left_ticks = 100
+            money = 500
+            earned = 150
+            reputation = 3.2  # Uy tín thập phân
+
+        tuning = {"score": {"reputation_multiplier": 100}}
+        sim = MockSim()
+        snap = _common(sim, 0, 0, 0, tuning, "playing")
+        # 150 + 100 * 3.2 = 470 (nếu dùng math.floor(3.2) sẽ bị lỗi thành 150 + 300 = 450)
+        self.assertEqual(snap["score"], 470)
+
+        # Kiểm tra thêm với trường hợp uy tín thập phân khác (3.7)
+        sim.reputation = 3.7
+        snap2 = _common(sim, 0, 0, 0, tuning, "playing")
+        self.assertEqual(snap2["score"], 520)
+
+        # Kiểm tra với điểm uy tín nguyên (3.0)
+        sim.reputation = 3.0
+        snap3 = _common(sim, 0, 0, 0, tuning, "playing")
+        self.assertEqual(snap3["score"], 450)
+
+
 if __name__ == "__main__":
     unittest.main()

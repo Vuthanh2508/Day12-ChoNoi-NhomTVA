@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Script kiểm định tính hợp lệ của File Kho theo Contract G (AI Skill: inventory-validator).
+"""Script kiểm định tính hợp lệ của File Kho theo Contract G v1.3 (AI Skill: inventory-validator).
 
-Quy tắc Contract G:
+Quy tắc Contract G v1.3:
 1. File JSON chỉ có khóa gốc duy nhất là 'items'.
-2. Các nguyên liệu hợp lệ: 'ca_loc', 'ca_linh', 'bong_dien_dien', 'bong_sung'.
-3. Số lượng phải là số nguyên dương (> 0, không nhận 0, không nhận số âm, không nhận boolean/float).
-4. Phân tích số món ăn tối đa có thể nấu được theo Menu chuẩn của quán.
+2. Trong Contract v1.3, 'items' bắt buộc là mảng các đối tượng cá thể: [{"id": "...", "kind": "...", "fresh": ...}].
+3. 'id' là chuỗi không rỗng, các id không được trùng lặp.
+4. 'kind' thuộc danh mục cho phép: 'ca_loc', 'ca_linh', 'bong_dien_dien', 'bong_sung', 'ca_keo', 'keo_neo'.
+5. 'fresh' là số thực/nguyên trong đoạn [0, 100]. Cá thể có fresh >= 30 mới được tính là tồn khả dụng (dưới 30 là ươn/spoiled).
+6. Từ chối định dạng kho đếm cũ v1.0 (dạng dict {"items": {kind: count}}).
+7. Phân tích số món ăn tối đa có thể nấu được theo Menu 6 món chuẩn của quán.
 """
 
 import json
@@ -45,31 +48,33 @@ def validate_inventory_file(path: str):
 
     if isinstance(items, list):
         seen_ids = set()
+        spoiled_count = 0
         for i, it in enumerate(items):
             if not isinstance(it, dict) or set(it.keys()) != {"id", "kind", "fresh"}:
                 return False, f"Item {i} không đúng cấu trúc {{id, kind, fresh}}", {}
-            if it["id"] in seen_ids:
-                return False, f"ID bị trùng lặp: '{it['id']}'", {}
-            seen_ids.add(it["id"])
-            if it["kind"] not in ALLOWED_KINDS:
-                return False, f"Nguyên liệu lạ không thuộc danh mục cho phép: '{it['kind']}'", {}
-            fresh = it["fresh"]
+            item_id = it.get("id")
+            if not isinstance(item_id, str) or not item_id:
+                return False, f"Item {i}: id phải là chuỗi khác rỗng", {}
+            if item_id in seen_ids:
+                return False, f"ID bị trùng lặp: '{item_id}'", {}
+            seen_ids.add(item_id)
+            kind = it.get("kind")
+            if kind not in ALLOWED_KINDS:
+                return False, f"Nguyên liệu lạ không thuộc danh mục cho phép: '{kind}'", {}
+            fresh = it.get("fresh")
             if isinstance(fresh, bool) or not isinstance(fresh, (int, float)) or fresh < 0 or fresh > 100:
-                return False, f"Độ tươi của item {it['id']} phải trong [0, 100], đang là: {fresh!r}", {}
+                return False, f"Độ tươi của item {item_id} phải trong [0, 100], đang là: {fresh!r}", {}
             if fresh >= 30:
-                counts[it["kind"]] = counts.get(it["kind"], 0) + 1
-        return True, "Hợp đồng kho cá thể v1.2 hợp lệ (Contract G v1.2 compliant).", counts
+                counts[kind] = counts.get(kind, 0) + 1
+            else:
+                spoiled_count += 1
+        msg = f"Hợp đồng kho cá thể v1.3 hợp lệ (Contract G v1.3 compliant). Tổng: {len(items)} cá thể ({len(items) - spoiled_count} tươi, {spoiled_count} ươn < 30)."
+        return True, msg, counts
 
     elif isinstance(items, dict):
-        for k, v in items.items():
-            if k not in ALLOWED_KINDS:
-                return False, f"Nguyên liệu lạ không thuộc danh mục cho phép: '{k}'", {}
-            if isinstance(v, bool) or not isinstance(v, int) or v <= 0:
-                return False, f"Số lượng của '{k}' phải là số nguyên dương (> 0), đang là: {v!r}", {}
-            counts[k] = v
-        return True, "Hợp đồng kho đếm v1.0 hợp lệ (Contract G v1.0).", counts
+        return False, "Contract v1.3 không chấp nhận định dạng kho đếm theo loại (v1.0); bắt buộc sử dụng mảng cá thể [{'id', 'kind', 'fresh'}, ...].", {}
 
-    return False, "'items' phải là mảng cá thể hoặc object đếm.", {}
+    return False, "'items' bắt buộc phải là mảng các cá thể trong Contract v1.3.", {}
 
 
 def analyze_menu(items: dict):
@@ -89,7 +94,7 @@ def main():
     ok, msg, items = validate_inventory_file(path)
 
     print("=" * 50)
-    print(f"KIỂM ĐỊNH FILE KHO: {path}")
+    print(f"KIỂM ĐỊNH FILE KHO CHUẨN CONTRACT G v1.3: {path}")
     print("=" * 50)
 
     if not ok:
@@ -97,7 +102,7 @@ def main():
         return 2
 
     print(f"✅ THÀNH CÔNG: {msg}")
-    print(f"📦 Số nguyên liệu có sẵn: {items}")
+    print(f"📦 Số nguyên liệu khả dụng (fresh >= 30): {items}")
 
     dishes = analyze_menu(items)
     print("\n🍽️  Khả năng phục vụ Menu của Quán:")

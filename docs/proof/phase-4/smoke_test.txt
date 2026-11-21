@@ -94,6 +94,8 @@ test_cli_writes_five_fields (test_phase4.BenchMetricsTests.test_cli_writes_five_
 test_formulas (test_phase4.BenchMetricsTests.test_formulas) ... ok
 test_p1_low_uses_ceil_of_one_percent (test_phase4.BenchMetricsTests.test_p1_low_uses_ceil_of_one_percent) ... ok
 test_declares_bench_and_soak (test_phase4.ContractV13Tests.test_declares_bench_and_soak) ... ok
+test_decimal_reputation_score_calculation (test_phase4.ScoreFormulaTests.test_decimal_reputation_score_calculation)
+Kiểm tra công thức score tính đúng phần thập phân của reputation (không bị floor mất điểm). ... ok
 test_seven_days_cycle_plan_and_deterministic (test_phase4.SoakTests.test_seven_days_cycle_plan_and_deterministic) ... ok
 test_bad_frames_raise (test_python_starter_units.Units.test_bad_frames_raise) ... ok
 test_catch_is_a_v10_button_and_attack_is_not (test_python_starter_units.Units.test_catch_is_a_v10_button_and_attack_is_not) ... ok
@@ -168,7 +170,7 @@ test_too_few_members (test_team_check.TeamCheck.test_too_few_members) ... ok
 test_wrong_size_duplicate_and_outsider (test_team_check.TeamCheck.test_wrong_size_duplicate_and_outsider) ... ok
 
 ----------------------------------------------------------------------
-Ran 143 tests in 32.408s
+Ran 144 tests in 23.977s
 
 OK
 

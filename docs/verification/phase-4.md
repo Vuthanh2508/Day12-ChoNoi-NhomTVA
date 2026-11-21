@@ -11,8 +11,8 @@ Mã commit bàn giao tính năng Phase 4: `ee2749d` (PR #16), tích hợp hoàn 
 | AC-P4-03 | Contract v1.3 khai `bench_cmd`, `soak_cmd` ở gốc; gameplay/tuning/kho/JSONL theo v1.2 | `game.contract.json`; `ContractV13Tests`. Chỉ test `test_phase3_qa` đổi (kiểm version `1.2` → `1.3`), lý do ghi trong commit | Đạt |
 | AC-P4-04 | Ba cảnh báo (thủy quái gần, oxy sắp hết, khách sắp giận) bằng chữ/biểu tượng và chế độ tương phản cao | Đã kiểm bằng Edge headless với dữ liệu mẫu (QA, trước PR này): sau khi bấm nút tương phản cao Canvas vẽ đủ cả ba cảnh báo; tùy chọn lưu trong trình duyệt. **Chưa chơi lại ba cảnh báo ở tương phản cao trong một lượt chơi thật** | Đạt với fixture; cần người chơi thử |
 | AC-P4-05 | Phụ đề SFX khi tắt tiếng (mở rộng) | Edge headless: tắt tiếng rồi event `oxygen_empty` hiện phụ đề, không tạo bộ phát âm thanh (QA, trước PR này) | Đạt với fixture |
-| AC-P4-06 | Clone sạch chạy bằng ≤ 3 lệnh | README mục "Bắt đầu nhanh": `git clone … && cd …` rồi `python3 -m chonoi.live --mode day`. Đã thử trên bản sao không có `.git` ở Windows: headless chạy được, live mở được cổng, 143/143 test | Đạt trên Windows. **Chưa thử trên macOS/Linux** |
-| AC-P4-07 | Regression P1–P3 còn hiệu lực | [smoke_test.txt](../proof/phase-4/smoke_test.txt): 143/143 test, tính tất định byte-for-byte | Đạt |
+| AC-P4-06 | Clone sạch chạy bằng ≤ 3 lệnh | README mục "Bắt đầu nhanh": `git clone … && cd …` rồi `python3 -m chonoi.live --mode day`. Đã thử trên bản sao không có `.git` ở Windows: headless chạy được, live mở được cổng, 144/144 test | Đạt trên Windows. **Chưa thử trên macOS/Linux** |
+| AC-P4-07 | Regression P1–P3 còn hiệu lực | [smoke_test.txt](../proof/phase-4/smoke_test.txt): 144/144 test, tính tất định byte-for-byte | Đạt |
 | AC-P4-08 | Chơi trọn một Ngày (Lặn & Hái → Mở Quán → đóng Shop) | `tests/test_live_day.py` chơi 2 ngày qua máy chủ live: khách vào, shop, ngày kế, kết thúc `days_complete`. **Chưa có video/chơi tay trên trình duyệt** | Đạt ở mức test; cần chơi thử để demo |
 | AC-P4-09 | Tag `phase-4` và Release `v1.0.0` cùng commit trên main | Đầy đủ điều kiện nghiệm thu, gắn tag `phase-4` và `v1.0.0` tại commit chốt trên main | Đạt |
 

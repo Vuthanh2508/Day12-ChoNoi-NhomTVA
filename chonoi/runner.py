@@ -36,7 +36,7 @@ def _common(sim, tick, sim_tick, phase_tick, tuning, state):
         "type": "snapshot", "tick": tick, "sim_tick": sim_tick, "mode": sim.mode, "phase": sim.phase,
         "phase_tick": phase_tick, "state": state, "time_left_ticks": sim.time_left_ticks,
         "money": sim.money, "earned": sim.earned, "reputation": sim.reputation,
-        "score": sim.earned + mult * math.floor(sim.reputation),
+        "score": int(round(sim.earned + mult * sim.reputation)),
     }
 
 
